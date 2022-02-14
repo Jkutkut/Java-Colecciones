@@ -60,27 +60,17 @@ public class Ej1 {
 	}
 	
 	private static void muestraOrdenadoValue(HashMap<String, Integer> tablaPalabras) {
-		Comparator<Integer> cmp = new Comparator<Integer>() {
+		TreeSet<String> tabla = new TreeSet<String>(new Comparator<String>() {
 			@Override
-			public int compare(Integer arg0, Integer arg1) {
-				return arg1 - arg0;
+			public int compare(String arg0, String arg1) {
+				return arg0.length() - arg1.length();
 			}
-		};
-		TreeMap<Integer, TreeSet<String>> tabla = new TreeMap<Integer, TreeSet<String>>(cmp);
+		});
 		
-		int l;
-		for (String k : tablaPalabras.keySet()) {
-			l = tablaPalabras.get(k);
-			if (!tabla.containsKey(l)) {
-				tabla.put(l, new TreeSet<String>());
-			}
-			tabla.get(l).add(k);
-		}
+		tabla.addAll(tablaPalabras.keySet());
 		
-		for (Integer q : tabla.keySet()) {
-			for (String s : tabla.get(q)) {
-				System.out.printf("%s con %d letras\n", s, q);
-			}
+		for (String s : tabla) {
+			System.out.println(s + " con " + s.length() + " letras");
 		}
 	}
 }
