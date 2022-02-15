@@ -40,21 +40,22 @@ public class Ej2 {
 			);
 			switch (selected) {
 			case 1:
-				
-//				break;
+				addSong();
+				break;
 			case 2:
-				
+//				removeSong();
 //				break;
 			case 3:
-				
+//				showPlaylist();
 //				break;
 			case 4:
-				
+//				playSong(getIntInRange("Posición de la canción: ", 1, menu.length()));
 //				break;
 			case 5:
-				
+//				playAll();
 //				break;
 			case 6:
+//				showTotalDuration();
 				System.out.println("Not implemented");
 				break;
 			case 7:
@@ -66,7 +67,18 @@ public class Ej2 {
 		}
 	}
 
-	
+	private static void addSong() {
+		String title, creator;
+		int duration;
+
+		System.out.println("Introduce los datos de la canción:");
+		title = getString("- Título: ");
+		creator = getString(" - Artista/grupo: ");
+		duration = getIntInRange("- Duración (s)", Cancion.MIN_DURATION, Cancion.MAX_DURATION);
+		
+		playlist.add(new Cancion(title, creator, duration));
+	}
+
 	private static String strJoin(String[] arr, String sep, String prefix) {
 		String str = "";
 		if (prefix == null)
