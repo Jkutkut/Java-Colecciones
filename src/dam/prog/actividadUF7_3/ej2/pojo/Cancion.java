@@ -15,6 +15,7 @@ public class Cancion {
 		this.setDuration(duration);
 	}
 	
+	// SETTERS
 	public void setTitle(String title) {
 		if (title == null) {
 			throw new InvalidDataException(
@@ -43,6 +44,19 @@ public class Cancion {
 			);
 		}
 		this.duration = duration;
+	}
+	
+	//GETTERS
+	public String getTitle() {
+		return title;
+	}
+	
+	public String getCreator() {
+		return creator;
+	}
+	
+	public int getDuration() {
+		return duration;
 	}
 	
 	@Override
