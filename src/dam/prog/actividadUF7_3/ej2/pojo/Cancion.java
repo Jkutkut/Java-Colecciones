@@ -3,7 +3,7 @@ package dam.prog.actividadUF7_3.ej2.pojo;
 public class Cancion {
 	
 	public static final int MIN_DURATION = 10;
-	public static final int MAX_DURATION = 10;
+	public static final int MAX_DURATION = 600;
 	
 	private String title;
 	private String creator;
@@ -61,6 +61,6 @@ public class Cancion {
 	
 	@Override
 	public String toString() {
-		return String.format("{Título: %s, artista/grupo: %s, duración: %ds}", title, creator, duration);
+		return String.format("%s de %s (%ds)", title, creator, duration);
 	}
 }
