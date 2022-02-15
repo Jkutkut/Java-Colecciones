@@ -1,5 +1,7 @@
 package dam.prog.actividadUF7_3.ej2;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,7 +25,13 @@ public class Ej2 {
 	};
 	
 	public static void main(String[] args) {
-		sc = new Scanner(System.in);
+		try {
+			sc = new Scanner(new File("src/dam/prog/actividadUF7_3/ej2/input.txt"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return;
+		}
+//		sc = new Scanner(System.in);
 		playlist = new ArrayList<Cancion>();
 
 		runTUI();
@@ -38,25 +46,26 @@ public class Ej2 {
 				"Selecione una opción:\n" + menu + "\n-> ",
 				1, menuOptions.length
 			);
+			System.out.println();
 			switch (selected) {
 			case 1:
 				addSong();
+				System.out.printf("Canción añadida. Canciones en playlist: %d\n", playlist.size());
 				break;
 			case 2:
-//				removeSong();
-//				break;
+				removeSong();
+				break;
 			case 3:
-//				showPlaylist();
-//				break;
+				showPlaylist();
+				break;
 			case 4:
-//				playSong(getIntInRange("Posición de la canción: ", 1, menu.length()));
-//				break;
+				playSong(getIntInRange("Posición de la canción: ", 1, playlist.size()));
+				break;
 			case 5:
-//				playAll();
-//				break;
+				playAll();
+				break;
 			case 6:
-//				showTotalDuration();
-				System.out.println("Not implemented");
+				showTotalDuration();
 				break;
 			case 7:
 				running = false;
@@ -73,10 +82,63 @@ public class Ej2 {
 
 		System.out.println("Introduce los datos de la canción:");
 		title = getString("- Título: ");
-		creator = getString(" - Artista/grupo: ");
-		duration = getIntInRange("- Duración (s)", Cancion.MIN_DURATION, Cancion.MAX_DURATION);
-		
+		creator = getString("- Artista/grupo: ");
+		duration = getIntInRange("- Duración (s): ", Cancion.MIN_DURATION, Cancion.MAX_DURATION);
+		System.out.println();
 		playlist.add(new Cancion(title, creator, duration));
+	}
+
+	private static void removeSong() {
+		String title, creator;
+		
+		System.out.println("Introduce los datos de la canción:");
+		title = getString("- Título: ");
+		creator = getString("- Artista/grupo: ");
+		
+		boolean found = false;
+		Cancion c;
+		for (int i = 0; i < playlist.size() && !found; i++) {
+			c = playlist.get(i);
+			if (c.getTitle().equalsIgnoreCase(title) &&
+				c.getCreator().equalsIgnoreCase(creator)) {
+				found = true;
+				playlist.remove(i);
+			}
+		}
+		if (found) {
+			System.out.println("Canción eliminada");
+		}
+		else {
+			System.out.println("Canción no encontrada. Seguro que lo has escrito bien?");
+		}
+		System.out.println();
+	}
+
+	private static void showPlaylist() {
+		for (int i = 0; i < playlist.size(); i++) {
+			System.out.printf("%d %s\n", i + 1, playlist.get(i));
+		}
+		System.out.println();
+	}
+
+	private static void playSong(int index) {
+		if (index < 1 || index > playlist.size()) {
+			System.out.println("Ese índice no es válido.");
+			return;
+		}
+		System.out.printf("\nSe está reproduciendo %s\n\n", playlist.get(index - 1));
+	}
+
+	private static void playAll() {
+		if (playlist.size() == 0) {
+			System.out.println("No hay canciones que reproducir");
+			return;
+		}
+		System.out.println("Reproduciendo todas las canciones");
+		for (int i = 0; i < playlist.size(); i++) {
+			System.out.printf("Se está reproduciendo %s\n", playlist.get(i));
+		}
+		System.out.println();
 	}
 
 	private static String strJoin(String[] arr, String sep, String prefix) {
@@ -94,6 +156,13 @@ public class Ej2 {
 		return str;
 	}
 
+	private static void showTotalDuration() {
+		int total = 0;
+		for (int i = 0; i < playlist.size(); i++)
+			total += playlist.get(i).getDuration();	
+		System.out.printf("Duración total de la canción: %ss\n\n", total);
+	}
+
 	// GETTERS
 	/**
 	 * @param question - Question to show using System.out
@@ -104,9 +173,7 @@ public class Ej2 {
 	public static String getString(String question, int minLen, int maxLen) {
 		String str;
 		while (true) {
-			System.out.print(question);
-			str = sc.nextLine();
-			
+			str = getString(question);
 			if (str.length() < minLen) {
 				System.out.println("La longitud mínima es de " + minLen + " caracteres\n");
 			}
@@ -121,7 +188,9 @@ public class Ej2 {
 	
 	public static String getString(String question) {
 		System.out.print(question);
-		return sc.nextLine();
+		String str = sc.nextLine();
+		System.out.println(str); // TODO DEBUG
+		return str;
 	}
 
 	/**
@@ -129,10 +198,13 @@ public class Ej2 {
 	 * @return Integer given by Scanner
 	 */
 	public static int getInt(String question) {
+		String n;
 		while (true) {
 			try {
 				System.out.print(question);
-				return Integer.parseInt(sc.nextLine());
+				n = sc.nextLine();
+				System.out.println(n);
+				return Integer.parseInt(n);
 			}
 			catch (NumberFormatException e) {
 				System.out.println("El valor no es un número entero válido.\n");
