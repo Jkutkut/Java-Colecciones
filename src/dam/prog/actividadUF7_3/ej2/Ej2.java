@@ -9,6 +9,8 @@ import dam.prog.actividadUF7_3.ej2.pojo.Cancion;
 import dam.prog.actividadUF7_3.ej2.pojo.InvalidDataException;
 
 public class Ej2 {
+	
+	private static final boolean DEBUG = false;
 
 	private static ArrayList<Cancion> playlist;
 	private static Scanner sc;
@@ -25,13 +27,17 @@ public class Ej2 {
 	};
 	
 	public static void main(String[] args) {
-		try {
-			sc = new Scanner(new File("src/dam/prog/actividadUF7_3/ej2/input.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return;
+		if (DEBUG) {
+			try {
+				sc = new Scanner(new File("src/dam/prog/actividadUF7_3/ej2/input.txt"));
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return;
+			}
 		}
-//		sc = new Scanner(System.in);
+		else
+			sc = new Scanner(System.in);
+		
 		playlist = new ArrayList<Cancion>();
 
 		runTUI();
@@ -91,6 +97,11 @@ public class Ej2 {
 	private static void removeSong() {
 		String title, creator;
 		
+		if (playlist.size() == 0) {
+			System.out.println("La playlist está vacía\n");
+			return;
+		}
+		
 		System.out.println("Introduce los datos de la canción:");
 		title = getString("- Título: ");
 		creator = getString("- Artista/grupo: ");
@@ -115,18 +126,19 @@ public class Ej2 {
 	}
 
 	private static void showPlaylist() {
-		for (int i = 0; i < playlist.size(); i++) {
-			System.out.printf("%d %s\n", i + 1, playlist.get(i));
-		}
+		if (playlist.size() == 0)
+			System.out.println("No hay canciones en la playlist.");
+		else
+			for (int i = 0; i < playlist.size(); i++)
+				System.out.printf("%d %s\n", i + 1, playlist.get(i));
 		System.out.println();
 	}
 
 	private static void playSong(int index) {
-		if (index < 1 || index > playlist.size()) {
+		if (index < 1 || index > playlist.size())
 			System.out.println("Ese índice no es válido.");
-			return;
-		}
-		System.out.printf("\nSe está reproduciendo %s\n\n", playlist.get(index - 1));
+		else
+			System.out.printf("\nSe está reproduciendo %s\n\n", playlist.get(index - 1));
 	}
 
 	private static void playAll() {
@@ -189,7 +201,8 @@ public class Ej2 {
 	public static String getString(String question) {
 		System.out.print(question);
 		String str = sc.nextLine();
-		System.out.println(str); // TODO DEBUG
+		if (DEBUG)
+			System.out.println(str); // TODO DEBUG
 		return str;
 	}
 
@@ -203,7 +216,8 @@ public class Ej2 {
 			try {
 				System.out.print(question);
 				n = sc.nextLine();
-				System.out.println(n);
+				if (DEBUG)
+					System.out.println(n); // TODO DEBUG
 				return Integer.parseInt(n);
 			}
 			catch (NumberFormatException e) {
